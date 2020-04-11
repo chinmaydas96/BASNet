@@ -52,9 +52,14 @@ def save_output(image_name,pred,d_dir):
 
 # --------- 1. get image path and name ---------
 
-image_dir = './test_data/test_images/'
-prediction_dir = './test_data/test_results/'
-model_dir = './saved_models/basnet_bsi/basnet.pth'
+#image_dir = './test_data/test_images/'
+image_dir = './test_data/validation/image/'
+
+#prediction_dir = './test_data/test_results/'
+prediction_dir = './test_data/validation/output/'
+
+model_dir = './saved_models/optimized_model.pth'
+
 
 img_name_list = glob.glob(image_dir + '*.jpg')
 

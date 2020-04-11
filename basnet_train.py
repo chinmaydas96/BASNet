@@ -66,8 +66,9 @@ def muti_bce_loss_fusion(d0, d1, d2, d3, d4, d5, d6, d7, labels_v):
 
 data_dir = './train_data/'
 tra_image_dir = 'DUTS/DUTS-TR/DUTS-TR/im_aug/'
+tra_image_dir = 'DUTS/image/'
 tra_label_dir = 'DUTS/DUTS-TR/DUTS-TR/gt_aug/'
-
+tra_label_dir = 'DUTS/mask/'
 image_ext = '.jpg'
 label_ext = '.png'
 
