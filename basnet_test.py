@@ -53,12 +53,12 @@ def save_output(image_name,pred,d_dir):
 # --------- 1. get image path and name ---------
 
 #image_dir = './test_data/test_images/'
-image_dir = './test_data/validation/image/'
+image_dir = './test_data/junk_images/'
 
 #prediction_dir = './test_data/test_results/'
-prediction_dir = './test_data/validation/output/'
+prediction_dir = './test_data/junk_mask/'
 
-model_dir = './saved_models/optimized_model.pth'
+model_dir = './saved_models/optimized_model_0.330985.pth'
 
 
 img_name_list = glob.glob(image_dir + '*.jpg')
@@ -96,6 +96,9 @@ for i_test, data_test in enumerate(test_salobj_dataloader):
 	pred = normPRED(pred)
 
 	# save results to test_results folder
+	print(pred.shape)
+	print(pred)
 	save_output(img_name_list[i_test],pred,prediction_dir)
+	break
 
 	del d1,d2,d3,d4,d5,d6,d7,d8

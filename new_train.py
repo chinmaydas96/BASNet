@@ -84,7 +84,8 @@ label_ext = '.png'
 model_dir = "./saved_models/"
 
 #PATH = "./saved_models/basnet.pth"
-PATH = "./saved_models/basnet_bsi_itr_350000_train_1.251228_tar_0.068751.pth"
+PATH = "./saved_models/optimized_model_0.346057.pth"
+PATH = "./saved_models/optimized_model_0.334364.pth"
 
 epoch_num = 200
 batch_size_train = 32 
@@ -192,10 +193,22 @@ if torch.cuda.is_available():
     
     
 import torch
+
 # ------- 4. define optimizer --------
+
 print("---define optimizer...")
+
+################ New Code ################
+### optimizer with step LR decrease
 optimizer = optim.Adam(net.parameters(), lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
-scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
+scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
+
+##########################################
+
+#from torch.utils.tensorboard import SummaryWriter
+
+# default `log_dir` is "runs" - we'll be more specific here
+#writer = SummaryWriter('runs/basnet')
 
 
 # ------- 5. training process --------
@@ -250,10 +263,12 @@ for epoch in range(0, epoch_num):
 
         # del temporary outputs and loss
         del d0, d1, d2, d3, d4, d5, d6, d7, loss2, loss
-
+        training_loss = running_tar_loss / ite_num4val
         print("[epoch: %3d/%3d, batch: %5d/%5d, ite: %d] train loss: %3f, tar: %3f ]" % (
         epoch + 1, epoch_num, (i + 1) * batch_size_train, train_size, ite_num, running_loss / ite_num4val, running_tar_loss / ite_num4val))
         
+        ################## new code ###################
+        ############ implement validation #############
         
         net.eval()
         for i, data in enumerate(valid_loader):
@@ -288,14 +303,15 @@ for epoch in range(0, epoch_num):
         del d0, d1, d2, d3, d4, d5, d6, d7, loss2_val, loss_val
         
         valid_loss = running_tar_loss_valid / ite_num4val_valid
+      
         
 
         
         print("[Valid loss: %3f, tar: %3f ]" % (running_loss_valid / ite_num4val_valid,
                                                valid_loss))
 
-        print('*************')
-        
+        ############# Save the model if tar loss decrease #################
+        ###################################################################
         # save model if validation loss has decreased
         if valid_loss <= valid_loss_min:
             print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(
@@ -319,6 +335,18 @@ for epoch in range(0, epoch_num):
 
         running_tar_loss_valid = 0.0
         scheduler.step()
+        
+        ############### Tensorboard #################
+
+        # ...log the running loss
+        #writer.add_scalar('training loss',
+        #                    training_loss,
+        #                    ite_num + 1)
+        
+        # ...log the running loss
+        #writer.add_scalar('validation loss',
+        #                    valid_loss,
+        #                    ite_num + 1)  
         
         #if ite_num % 2000 == 0:  # save model every 2000 iterations
 
