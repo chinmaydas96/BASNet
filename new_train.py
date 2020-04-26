@@ -85,7 +85,7 @@ model_dir = "./saved_models/"
 
 #PATH = "./saved_models/basnet.pth"
 PATH = "./saved_models/optimized_model_0.346057.pth"
-PATH = "./saved_models/optimized_model_0.334364.pth"
+#PATH = "./saved_models/optimized_model_0.334364.pth"
 
 epoch_num = 200
 batch_size_train = 32 
@@ -191,8 +191,6 @@ if torch.cuda.device_count() > 1:
 if torch.cuda.is_available():
     net.cuda()
     
-    
-import torch
 
 # ------- 4. define optimizer --------
 
