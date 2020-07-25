@@ -29,7 +29,6 @@ def download_image(url):
 
 	if 'drive.google' in url:
 		output = gdown.download(url, quiet=True)
-		print(output)
 		im = Image.open(output)
 
 		
